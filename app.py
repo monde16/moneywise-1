@@ -65,7 +65,6 @@ def main():
     last = str2date(args.last) if args.last else last_month_date(first)
     days = len(list(workdays(first, last + timedelta(1)))) # here we go past the last day so that the workdays method includes it.
     print(f'{first} .. {last} => {days} work days')
-    print(f"Holidays:")
 
 
 if __name__ == '__main__':
