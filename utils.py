@@ -38,13 +38,16 @@ def first_month_date(dt):
     return date(dt.year, dt.month, 1)
 
 
-def days_btw(x, y, rightincl=False):
+def month_days(dt):
+    return days_btw(first_month_date(dt), last_month_date(dt), True)
+
+
+def days_btw(x, y, rincl=False):
     """Returns dates between the 2 given dates
-    use rightincl = True to include the last day as well."""
+    use rincl = True to include the last day as well (Right Inclusive)."""
     if x > y:
-        return days_btw(y, x, rightincl)
-    zero = timedelta(0)
-    while (rightincl and y - x >= zero) or y - x > zero:
+        return days_btw(y, x, rincl)
+    while y - x > timedelta(0) or rincl and x == y:
         yield x
         x += timedelta(1)
 
