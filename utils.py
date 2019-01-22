@@ -34,6 +34,21 @@ def last_month_date(dt):
     return date(yy, mm, dd)
 
 
+def first_month_date(dt):
+    return date(dt.year, dt.month, 1)
+
+
+def days_btw(x, y, rightincl=False):
+    """Returns dates between the 2 given dates
+    use rightincl = True to include the last day as well."""
+    if x > y:
+        return days_btw(y, x, rightincl)
+    zero = timedelta(0)
+    while (rightincl and y - x >= zero) or y - x > zero:
+        yield x
+        x += timedelta(1)
+
+
 def workdays(a, b):
     """Calculate workdays between dates a & b.
 
