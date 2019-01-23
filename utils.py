@@ -20,12 +20,16 @@ def get_holidays():
 holidays = get_holidays()
 
 
-def is_weekday(date):
-    return weekday(date.year, date.month, date.day) in range(5)
+def is_weekday(dt):
+    return weekday(dt.year, dt.month, dt.day) in range(5)
 
 
-def is_holiday(date):
-    return date in holidays
+def is_weekend(dt):
+    return not is_weekday(dt)
+
+
+def is_holiday(dt):
+    return dt in holidays
 
 
 def last_month_date(dt):

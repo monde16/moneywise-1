@@ -7,7 +7,7 @@ MAX_HRS = 88
 def main():
     print(f"On month: {date.today()}")
 
-    st = SimpleStrategy([{'id': i, 'hrs': 0, 'ot': False, 'otc': 0} for i in range(1, 13)])
+    st = SimpleStrategy([{'id': i, 'hrs': 0, 'wkc': 0, 'otc': 0} for i in range(1, 13)])
     print(f"People = {st}")
 
     for d in month_days(date.today()):
@@ -20,31 +20,30 @@ def main():
 
 
 def assign_pair(a, b, day):
-    if not is_weekday(day):
-        a['ot'], b['ot'] = True, True
+    if is_weekday(day):
+        a_ot, b_ot = True, False
     else:
-        if a['otc'] <= b['otc']:
-            a['ot'], b['ot'] = True, False
-        else:
-            a['ot'], b['ot'] = False, True
-    assign(a)
-    assign(b)
-    a['ot'], b['ot'] = False, False
+        a_ot, b_ot = True, True
+
+    assign(a, a_ot, day)
+    assign(b, b_ot, day)
 
 
-def assign(p):
+def assign(p, ot, d):
+    p['wkc'] += 1
     hrs = p['hrs']
     if hrs < MAX_HRS:
-        if p['ot']:
+        if ot:
             hrs_to_work = 24
         else:
             hrs_to_work = 7
         hrs_to_work = min(hrs_to_work, MAX_HRS-p['hrs'])
-        p['hrs'] = hrs + hrs_to_work
-        if hrs_to_work > 7:
-            p['otc'] = p['otc'] + 1
+        p['hrs'] += hrs_to_work
+        if hrs_to_work > 7 or is_weekend(d):
+            p['otc'] += 1
         return hrs_to_work > 0
-    return False
+    else:
+        return False
 
 
 if __name__ == '__main__':
