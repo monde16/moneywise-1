@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import argparse
-from datetime import datetime
 
 from utils import *
 
@@ -19,7 +18,7 @@ def main():
 
     first = str2date(args.first) if args.first else datetime.now().date()
     last = str2date(args.last) if args.last else last_month_date(first)
-    days = len(list(workdays(first, last + timedelta(1)))) # here we go past the last day so that the workdays method includes it.
+    days = len(list(workdays(first, last + timedelta(1))))  # We add an extra day bc workdays() is right-exclusive.
     print(f'{first} .. {last} => {days} work days')
 
 

@@ -1,31 +1,28 @@
-import re
 from calendar import monthrange, weekday
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
-import config
+from config import Config
+
+cfg = Config()
 
 
 def str2date(s):
-    if re.match(r'(?:\d{4}([^\d])\d\d?\1\d\d?)', s):
-        t = tuple([int(e) for e in s.split(s[4])])
-        return date(*t)
-    else:
-        raise ValueError(f'{s} is not of fomat: yyyy/mm/dd')
+    return datetime.strptime(s, cfg.date_fmt).date()
 
 
 def get_holidays():
-    return [str2date(t[0]) for t in config.holidays]
+    return {k: [str2date(t[0]) for t in v] for k, v in cfg.holidays.items()}
 
 
 holidays = get_holidays()
 
 
-def is_weekday(date):
-    return weekday(date.year, date.month, date.day) in range(5)
+def is_weekday(dt):
+    return weekday(dt.year, dt.month, dt.day) in range(5)
 
 
-def is_holiday(date):
-    return date in holidays
+def is_holiday(dt):
+    return dt in holidays[dt.year]
 
 
 def last_month_date(dt):
@@ -64,5 +61,3 @@ def workdays(a, b):
         n += 1
         if is_weekday(day) and not is_holiday(day):
             yield day
-
-
